@@ -9,8 +9,8 @@ CREATE TABLE Author
    name varchar(50) NOT NULL)
 
 INSERT Author (id, name)
-	VALUES (1, 'Рэй Брэдбери'), (2, 'Оскар Уайльд'), (3, 'Антуан де Сент-Экзюпери'), 
-	(4, 'Михаил Булгаков'), (5, 'Эрих Мария Ремарк')
+	VALUES (1, 'Р СЌР№ Р‘СЂСЌРґР±РµСЂРё'), (2, 'РћСЃРєР°СЂ РЈР°Р№Р»СЊРґ'), (3, 'РђРЅС‚СѓР°РЅ РґРµ РЎРµРЅС‚-Р­РєР·СЋРїРµСЂРё'), 
+	(4, 'РњРёС…Р°РёР» Р‘СѓР»РіР°РєРѕРІ'), (5, 'Р­СЂРёС… РњР°СЂРёСЏ Р РµРјР°СЂРє')
 
 CREATE TABLE Book  
    (id int PRIMARY KEY NOT NULL,  
@@ -18,18 +18,18 @@ CREATE TABLE Book
    author_id int NOT NULL)
 
 INSERT Book (id, name, author_id)
-	VALUES (1, 'Марсианские хроники', 1), (2, 'Портрет Дориана Грея', 2), 
-	(3, '451° по Фаренгейту', 1), (4, 'Маленький принц', 3), (5, 'Мастер и Маргарита', 4),
-	(6, 'Белая гвардия', 4), (7, 'Три товарища', 5), (8, 'Вино из одуванчиков', 1), 
-	(9, 'И грянул гром', 1), (10, 'Собачье сердце', 4)
+	VALUES (1, 'РњР°СЂСЃРёР°РЅСЃРєРёРµ С…СЂРѕРЅРёРєРё', 1), (2, 'РџРѕСЂС‚СЂРµС‚ Р”РѕСЂРёР°РЅР° Р“СЂРµСЏ', 2), 
+	(3, '451В° РїРѕ Р¤Р°СЂРµРЅРіРµР№С‚Сѓ', 1), (4, 'РњР°Р»РµРЅСЊРєРёР№ РїСЂРёРЅС†', 3), (5, 'РњР°СЃС‚РµСЂ Рё РњР°СЂРіР°СЂРёС‚Р°', 4),
+	(6, 'Р‘РµР»Р°СЏ РіРІР°СЂРґРёСЏ', 4), (7, 'РўСЂРё С‚РѕРІР°СЂРёС‰Р°', 5), (8, 'Р’РёРЅРѕ РёР· РѕРґСѓРІР°РЅС‡РёРєРѕРІ', 1), 
+	(9, 'Р РіСЂСЏРЅСѓР» РіСЂРѕРј', 1), (10, 'РЎРѕР±Р°С‡СЊРµ СЃРµСЂРґС†Рµ', 4)
 
 CREATE TABLE Lib_user  
    (id int PRIMARY KEY NOT NULL,  
    name varchar(50) NOT NULL)
 
 INSERT Lib_user(id, name)
-	VALUES (1, 'Иванов И.'), (2, 'Петров П.'), (3, 'Сидоров С.'), 
-	(4, 'Ильин И.'), (5, 'Алексеев А.')
+	VALUES (1, 'РРІР°РЅРѕРІ Р.'), (2, 'РџРµС‚СЂРѕРІ Рџ.'), (3, 'РЎРёРґРѕСЂРѕРІ РЎ.'), 
+	(4, 'РР»СЊРёРЅ Р.'), (5, 'РђР»РµРєСЃРµРµРІ Рђ.')
 
 CREATE TABLE Order_history  
    (id int PRIMARY KEY NOT NULL,  
@@ -61,14 +61,14 @@ declare
 @date_check date = '01.01.2022',
 @active_order int = 1
 
-select l.name as "Читатель", count(o.book_id) as "Кол-во взятых книг" 
+select l.name as "Р§РёС‚Р°С‚РµР»СЊ", count(o.book_id) as "РљРѕР»-РІРѕ РІР·СЏС‚С‹С… РєРЅРёРі" 
 from Lib_user l
 left join Order_history o on o.lib_user_id = l.id 
 where o.order_state = @active_order
 group by l.name
 having count(o.book_id) > @num_book
 
-select a.name as "Автор", count(b.id) as "Кол-во книг" 
+select a.name as "РђРІС‚РѕСЂ", count(b.id) as "РљРѕР»-РІРѕ РєРЅРёРі" 
 from Author a
 left join Book b on b.author_id = a.id
 group by a.name
@@ -78,12 +78,12 @@ having count(b.id) > (
 	left join Book b on b.author_id = a.id)
 order by 2 desc
 
-select b.name as "Книга"
+select b.name as "РљРЅРёРіР°"
 from Book b 
 left join Order_history o on o.book_id = b.id and o.order_state = @active_order
 where o.id is null
 
-select b.name as "Книга", o.begindate as "Дата взятия", o.enddate as "Дата возврата"
+select b.name as "РљРЅРёРіР°", o.begindate as "Р”Р°С‚Р° РІР·СЏС‚РёСЏ", o.enddate as "Р”Р°С‚Р° РІРѕР·РІСЂР°С‚Р°"
 from Book b 
 left join Order_history o on o.book_id = b.id 
 where @date_check between o.begindate and isnull(o.enddate, GETDATE())
